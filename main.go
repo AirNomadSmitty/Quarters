@@ -12,16 +12,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var db *sql.DB
-var err error
-
-type Home struct {
-	Title string
-	Body  []byte
-}
-
 func main() {
-	db, err = sql.Open("mysql", "root:@/quarters")
+	db, err := sql.Open("mysql", "root:@/quarters")
 	if err != nil {
 		panic(err.Error())
 	}
