@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"net/http"
-	"text/template"
 
 	"github.com/airnomadsmitty/quarters/mappers"
 
@@ -19,15 +18,6 @@ var err error
 type Home struct {
 	Title string
 	Body  []byte
-}
-
-func homePage(res http.ResponseWriter, req *http.Request) {
-	p1 := &Home{Title: "TestPage", Body: []byte("This is the index my dudes.")}
-	t, err := template.ParseFiles("views/index.html")
-	if err != nil {
-		panic(err.Error())
-	}
-	t.Execute(res, p1)
 }
 
 func main() {
