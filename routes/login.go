@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/airnomadsmitty/quarters/mappers"
+	"github.com/airnomadsmitty/quarters/utils"
 )
 
 type LoginController struct {
@@ -34,5 +35,18 @@ func (cont *LoginController) Post(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	res.Write([]byte("Hello " + user.Username))
+	auth := &utils.Auth{UserID: user.UserID}
+	jwt, expirationTime, err := auth.MakeJWT()
+
+	if err != nil {
+		http.Redirect(res, req, "/login", 301)
+	}
+
+	http.SetCookie(res, &http.Cookie{
+		Name:    "token",
+		Value:   *jwt,
+		Expires: *expirationTime,
+	})
+
+	http.Redirect(res, req, "/", 302)
 }
