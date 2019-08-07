@@ -26,12 +26,12 @@ func (cont *LoginController) Post(res http.ResponseWriter, req *http.Request) {
 	user, err := cont.userMapper.GetFromUsername(username)
 
 	if err != nil {
-		http.Redirect(res, req, "/login", 301)
+		http.Redirect(res, req, "/login", http.StatusSeeOther)
 		return
 	}
 
 	if !user.ValidatePassword(password) {
-		http.Redirect(res, req, "/login", 301)
+		http.Redirect(res, req, "/login", http.StatusSeeOther)
 		return
 	}
 
@@ -39,7 +39,7 @@ func (cont *LoginController) Post(res http.ResponseWriter, req *http.Request) {
 	jwt, expirationTime, err := auth.MakeJWT()
 
 	if err != nil {
-		http.Redirect(res, req, "/login", 301)
+		http.Redirect(res, req, "/login", http.StatusSeeOther)
 	}
 
 	http.SetCookie(res, &http.Cookie{
@@ -48,5 +48,5 @@ func (cont *LoginController) Post(res http.ResponseWriter, req *http.Request) {
 		Expires: *expirationTime,
 	})
 
-	http.Redirect(res, req, "/", 302)
+	http.Redirect(res, req, "/dashboard", http.StatusSeeOther)
 }

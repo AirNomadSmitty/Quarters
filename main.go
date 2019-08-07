@@ -31,14 +31,19 @@ func main() {
 	signup := routes.MakeSignupController(userMapper)
 	login := routes.MakeLoginController(userMapper)
 	index := routes.MakeIndexController()
+	dashboard := routes.MakeDashboardController(userMapper)
+	logout := routes.MakeLogoutController()
 
-	r.HandleFunc("/", index.Get).Methods("GET")
+	r.HandleFunc("/", NewAuthenticatedWrapper(index.Get).ServeHTTP).Methods("GET")
 
 	r.HandleFunc("/signup", signup.Get).Methods("GET")
 	r.HandleFunc("/signup", signup.Post).Methods("POST")
 
 	r.HandleFunc("/login", login.Get).Methods("GET")
 	r.HandleFunc("/login", login.Post).Methods("POST")
+	r.HandleFunc("/logout", NewAuthenticatedWrapper(logout.Get).ServeHTTP).Methods("GET")
+
+	r.HandleFunc("/dashboard", NewAuthenticatedWrapper(dashboard.Get).ServeHTTP).Methods("GET")
 
 	http.Handle("/", r)
 	http.ListenAndServe(":8080", nil)
