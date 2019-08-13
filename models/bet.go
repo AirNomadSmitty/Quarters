@@ -5,10 +5,12 @@ type Position struct {
 	UserID         int64
 	Description    string
 	OddsMultiplier float64
+	State          int
 }
 type Bet struct {
-	MyPosition     Position
-	OtherPositions []Position
+	BetID          int64
+	MyPosition     *Position
+	OtherPositions []*Position
 	BaseValue      float64
 	Created        string
 	Notes          string

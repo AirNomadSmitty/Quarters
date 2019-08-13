@@ -27,11 +27,12 @@ func main() {
 	r := mux.NewRouter()
 
 	userMapper := mappers.MakeUserMapper(db)
+	betMapper := mappers.NewBetMapper(db)
 
 	signup := routes.MakeSignupController(userMapper)
 	login := routes.MakeLoginController(userMapper)
 	index := routes.MakeIndexController()
-	dashboard := routes.MakeDashboardController(userMapper)
+	dashboard := routes.MakeDashboardController(userMapper, betMapper)
 	logout := routes.MakeLogoutController()
 
 	r.HandleFunc("/", NewAuthenticatedWrapper(index.Get).ServeHTTP).Methods("GET")
