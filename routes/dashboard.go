@@ -22,8 +22,7 @@ func (cont *DashboardController) Get(res http.ResponseWriter, req *http.Request,
 		http.Redirect(res, req, "/login", 301)
 	}
 
-	
-	cont.betMapper.GetFromBetIdsWithUserId([2], auth.UserID)
+	cont.betMapper.GetFromUserId(auth.UserID)
 
 	res.Write([]byte("Logged in with UserID " + strconv.FormatInt(auth.UserID, 10)))
 }

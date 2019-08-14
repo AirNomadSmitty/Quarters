@@ -1,5 +1,11 @@
 package models
 
+const (
+	POSITION_STATE_OPEN = 0
+	POSITION_STATE_WIN  = 1
+	POSITION_STATE_LOSE = 2
+)
+
 type Position struct {
 	PositionID     int64
 	UserID         int64
