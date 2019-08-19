@@ -29,6 +29,20 @@ func (mapper *UserMapper) GetFromUsername(username string) (*models.User, error)
 	return user, nil
 }
 
+func (mapper *UserMapper) GetFromUserID(userID int64) (*models.User, error) {
+	user := &models.User{}
+	err := mapper.db.QueryRow("SELECT user_id, username, password_hash FROM users WHERE user_id=?", userID).Scan(&user.UserID, &user.Username, &user.PasswordHash)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+
+}
+
 func (mapper *UserMapper) Update(user *models.User) error {
 	if user.UserID != 0 {
 		_, err := mapper.db.Exec("UPDATE users SET username = ?, password_hash = ?", user.Username, user.PasswordHash)

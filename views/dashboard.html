@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+         <meta charset="UTF-8">
+   </head>
+   <body>
+
+        Welcome {{.User.Username}}!
+        {{ range $bet := .Bets }}
+        <div>
+        {{ $bet.MyPosition.Description }}
+        </div>
+        {{ end }}
+    </body>
+</html>

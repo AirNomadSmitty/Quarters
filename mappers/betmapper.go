@@ -55,6 +55,7 @@ func (mapper *BetMapper) getFromBetIdsWithUserId(betIds []int64, userId int64) (
 			bet.OtherPositions = append(bet.OtherPositions, position)
 		}
 
+		bets[bet.BetID] = bet
 	}
 	// get any error encountered during iteration
 	err = rows.Err()
