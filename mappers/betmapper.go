@@ -3,6 +3,7 @@ package mappers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -18,12 +19,15 @@ func NewBetMapper(db *sql.DB) *BetMapper {
 }
 
 func (mapper *BetMapper) getFromBetIdsWithUserId(betIds []int64, userId int64) (map[int64]models.Bet, error) {
-	rows, err := mapper.db.Query(`
+	// Don't mind using a placeholder since this is internal and will always be safe
+	sql := fmt.Sprintf(`
 	SELECT b.bet_id, b.created, b.closed, p.position_id, p.description, p.odds_multiplier, u2p.user_id, bc.winning_position_id FROM bets b
 	INNER JOIN positions p ON p.bet_id = b.bet_id
 	INNER JOIN users_to_positions u2p ON u2p.position_id = p.position_id
 	LEFT JOIN bet_closes bc ON bc.bet_id = b.bet_id
-	WHERE b.bet_id IN (?)`, StringFromIntSlice(betIds))
+	WHERE b.bet_id IN (%s)`, StringFromIntSlice(betIds))
+	rows, err := mapper.db.Query(sql)
+
 	if err != nil {
 		return nil, err
 	}
@@ -36,6 +40,7 @@ func (mapper *BetMapper) getFromBetIdsWithUserId(betIds []int64, userId int64) (
 	for rows.Next() {
 		position = &models.Position{}
 		err = rows.Scan(&bet.BetID, &bet.Created, &bet.Closed, &position.PositionID, &position.Description, &position.OddsMultiplier, &position.UserID, &winningPositionId)
+
 		if err != nil {
 			return nil, err
 		}
