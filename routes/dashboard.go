@@ -15,8 +15,9 @@ type DashboardController struct {
 }
 
 type dashboardData struct {
-	User *models.User
-	Bets map[int64]models.Bet
+	User       *models.User
+	OpenBets   map[int64]models.Bet
+	ClosedBets map[int64]models.Bet
 }
 
 func MakeDashboardController(userMapper *mappers.UserMapper, betMapper *mappers.BetMapper) *DashboardController {
@@ -33,7 +34,11 @@ func (cont *DashboardController) Get(res http.ResponseWriter, req *http.Request,
 	if err != nil {
 		panic(err.Error())
 	}
-	data.Bets, err = cont.betMapper.GetFromUserId(data.User.UserID)
+	data.OpenBets, err = cont.betMapper.GetOpenFromUserId(data.User.UserID)
+	if err != nil {
+		panic(err.Error())
+	}
+	data.ClosedBets, err = cont.betMapper.GetClosedFromUserId(data.User.UserID)
 	if err != nil {
 		panic(err.Error())
 	}

@@ -1,8 +1,7 @@
 CREATE TABLE `bet_closes` (
   `bet_close_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `bet_id` int(10) unsigned NOT NULL,
-  `winning_position_id` int(10) unsigned DEFAULT '0',
-  `losing_position_id` int(10) unsigned DEFAULT '0',
+  `winning_position_id` int(10) unsigned DEFAULT NULL,
   `close_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`bet_close_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -13,7 +12,7 @@ CREATE TABLE `bets` (
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `base_value` decimal(6,2) unsigned NOT NULL DEFAULT '0.25',
   `closed` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `notes` varchar(124) NOT NULL DEFAULT "",
+  `note` varchar(124) NOT NULL DEFAULT "",
   PRIMARY KEY (`bet_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

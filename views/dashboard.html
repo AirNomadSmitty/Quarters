@@ -5,12 +5,21 @@
          <meta charset="UTF-8">
    </head>
    <body>
-
         Welcome {{.User.Username}}!
-        {{ range $bet := .Bets }}
-        <div>
-        {{ $bet.MyPosition.Description }}
-        </div>
-        {{ end }}
+
+        <a href="/bet/create">New Bet</a>
+        <h2>Open Bets</h2>
+        {{ range $id, $bet := .OpenBets}}
+            <span>{{$bet.MyPosition.Description}}</span>
+            <span> 
+                {{ range $position := $bet.OtherPositions }}
+                <span>{{ $position.UserID }}</span>
+                {{ end }}
+            </span>
+        {{end}}
+        <h2>Closed Bets</h2>
+        {{ range $id, $bet := .ClosedBets}}
+            <span>{{$bet.MyPosition.Description}}</span>
+        {{end}}
     </body>
 </html>

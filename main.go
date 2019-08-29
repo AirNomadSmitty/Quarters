@@ -34,6 +34,8 @@ func main() {
 	index := routes.MakeIndexController()
 	dashboard := routes.MakeDashboardController(userMapper, betMapper)
 	logout := routes.MakeLogoutController()
+	bet := routes.NewBetController(betMapper)
+	createBet := routes.NewCreateBetController(betMapper)
 
 	r.HandleFunc("/", NewAuthenticatedWrapper(index.Get).ServeHTTP).Methods("GET")
 
@@ -46,6 +48,9 @@ func main() {
 
 	r.HandleFunc("/dashboard", NewAuthenticatedWrapper(dashboard.Get).ServeHTTP).Methods("GET")
 
+	r.HandleFunc("/bet/create", NewAuthenticatedWrapper(createBet.Get).ServeHTTP).Methods("GET")
+	r.HandleFunc("/bet/create", NewAuthenticatedWrapper(createBet.Post).ServeHTTP).Methods("POST")
+	r.HandleFunc("/bet/{id:[0-9]+}", NewAuthenticatedWrapper(bet.Get).ServeHTTP).Methods("GET")
 	http.Handle("/", r)
 	http.ListenAndServe(":8080", nil)
 }

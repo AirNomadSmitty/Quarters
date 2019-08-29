@@ -4,6 +4,8 @@ const (
 	POSITION_STATE_OPEN = 0
 	POSITION_STATE_WIN  = 1
 	POSITION_STATE_LOSE = 2
+	BET_STATUS_OPEN     = 0
+	BET_STATUS_CLOSED   = 1
 )
 
 type Position struct {
@@ -11,7 +13,13 @@ type Position struct {
 	UserID         int64
 	Description    string
 	OddsMultiplier float64
-	State          int
+}
+
+type BetClose struct {
+	BetCloseID        *int64
+	BetID             *int64
+	CloseDate         *string
+	WinningPositionID *int64
 }
 type Bet struct {
 	BetID          int64
@@ -19,7 +27,6 @@ type Bet struct {
 	OtherPositions []*Position
 	BaseValue      float64
 	Created        string
-	Notes          string
-	Closed         bool
-	CloseDate      string
+	Note           string
+	Close          *BetClose
 }
